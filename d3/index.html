@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Orbital Map — D3.js</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+  <!-- D3 v7 -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>Orbital Map (D3)</h1>
+      <div class="controls">
+        <button id="resetZoom">Reset zoom</button>
+        <span class="hint">Hover or Tab to focus an object to highlight its orbit & label.</span>
+      </div>
+    </header>
+
+    <div id="viz-wrap">
+      <!-- SVG will be appended here by script.js -->
+    </div>
+
+    <footer>
+      <small>This is a port of a Matplotlib polar/logarithmic orbital figure to D3.js. Default opacity = 0.8; hover/focus → 1.0</small>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
