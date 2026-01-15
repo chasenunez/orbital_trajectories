@@ -2,31 +2,26 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Orbital Map — D3.js</title>
+  <title>Orbital Trajectories — D3 viewer</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="stylesheet" href="style.css" />
-  <!-- D3 v7 -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
-  <div id="app">
-    <header>
-      <h1>Orbital Map (D3)</h1>
-      <div class="controls">
-        <button id="resetZoom">Reset zoom</button>
-        <span class="hint">Hover or Tab to focus an object to highlight its orbit & label.</span>
-      </div>
-    </header>
-
-    <div id="viz-wrap">
-      <!-- SVG will be appended here by script.js -->
-    </div>
-
-    <footer>
-      <small>This is a port of a Matplotlib polar/logarithmic orbital figure to D3.js. Default opacity = 0.8; hover/focus → 1.0</small>
-    </footer>
+  <div id="controls">
+    <button id="playPause">Pause</button>
+    <label>Speed: <input id="speed" type="range" min="0.1" max="5" step="0.1" value="1"></label>
+    <label>Time: <input id="timeSlider" type="range" min="0" max="100" step="1" value="0" style="width:400px;"></label>
+    <span id="timeLabel"></span>
   </div>
+
+  <div id="canvas-wrap">
+    <svg id="viz"></svg>
+  </div>
+
+  <div id="legend"></div>
 
   <script src="script.js"></script>
 </body>
 </html>
+
