@@ -39,7 +39,7 @@ PLOT_COLORS = os.path.join(DATA_DIR, "plotting_functions", "cat colors.csv")
 # and the associated fraction(s) to keep (0..<1]).
 # Example: SUBSAMPLE_CATEGORIES = ("moons","small_asteroids")
 #          SUBSAMPLE_AMOUNTS = (0.1, 0.05)
-SUBSAMPLE_CATEGORIES = ("any_inner_asteroids","any_outer_asteroids","large_asteroids","small_asteroids.csv",)   # example: subsample moons
+SUBSAMPLE_CATEGORIES = ("any_inner_asteroids","any_outer_asteroids","large_asteroids","small_asteroids")   # example: subsample moons
 SUBSAMPLE_AMOUNTS = (0.01,0.01,0.01,0.01)          # keep 1% 
 
 # If SUBSAMPLE_CATEGORIES includes a class, a fraction from SUBSAMPLE_AMOUNTS is applied.

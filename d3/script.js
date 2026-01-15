@@ -10,13 +10,13 @@ const DEFAULTS = {
   SUBSAMPLE_CATEGORIES: [],  // example: ["moons"]
   SUBSAMPLE_AMOUNT: 0.2,     // default fraction used if category selected for subsample in UI
   LOG_RADIAL_EPS: 1e-3,      // offset to avoid log(0)
-  START_PLAYING: false       // viewer starts paused
+  START_PLAYING: true,       // viewer starts paused
 };
 
 // DOM elements
 const svg = d3.select("#viz");
 const width = +svg.node().clientWidth || 1000;
-const height = +svg.node().clientHeight || 700;
+const height = +svg.node().clientHeight || 1000;
 const center = { x: width/2, y: height/2 };
 
 const playPauseBtn = document.getElementById("playPause");
@@ -57,7 +57,7 @@ d3.json("data/scene.json").then(s => {
   scene = s;
   initUI();
   resetView();
-  updateTimeLabel(0);
+  // updateTimeLabel(0);
   if (DEFAULTS.START_PLAYING) startTimer();
 }).catch(err => {
   console.error("Failed to load data/scene.json", err);
@@ -177,11 +177,11 @@ const view = {
 // compute extents & initialize svg
 function resetView(){
   // background color
-  svg.style("background-color", "#2b2b2b");
+  svg.style("background-color", "#222");
 
   // compute radial extents across all available points (sample a subset for speed)
   let minr = Infinity, maxr = 0;
-  const sampleN = Math.min(200000, scene.metadata.time_count * scene.objects.length);
+  const sampleN = Math.min(200000, scene.metadata.time_count * scene.objects.length);//200000
   // simple approach: iterate objects and find their max radius across their valid points
   scene.objects.forEach(o => {
     for (let i=0;i<o.x.length;i+=Math.max(1, Math.floor(o.x.length/500))){
@@ -290,7 +290,7 @@ function updateScene(index){
   if (!scene) return;
   tIndex = Math.floor(Math.max(0, Math.min(index, scene.times_jd.length - 1)));
   timeSlider.value = tIndex;
-  updateTimeLabel(tIndex);
+  //updateTimeLabel(tIndex);
 
   // update trails & bodies positions using current tIndex
   const bodiesGroup = svg.select("#bodies");

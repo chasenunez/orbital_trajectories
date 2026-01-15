@@ -1,7 +1,7 @@
 body {
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
   margin: 8px;
-  background: #fafafa;
+  background: #222;
   color: #222;
 }
 #controls {
@@ -12,17 +12,17 @@ body {
 }
 #canvas-wrap {
   border: 1px solid #ddd;
-  background: linear-gradient(#02020a, #001030);
+ #background: linear-gradient(#02020a, #001030);
   padding: 8px;
 }
 svg#viz {
   width: 1000px;
-  height: 700px;
+  height: 1000px;
   display: block;
-  background: radial-gradient(circle at center, rgba(255,255,255,0.02), rgba(0,0,0,0.2));
+ #background: radial-gradient(circle at center, rgba(255,255,255,0.02), rgba(0,0,0,0.2));
 }
 #legend {
-  margin-top: 8px;
+  margin-top: 13px;
   font-size: 13px;
 }
 .node {
