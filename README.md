@@ -9,7 +9,7 @@
 
 #### Orbital Trajectories Interface
 
-This is an [in development] interactive tool visualizing NASA JPL's small-body database building on the amazing work of [Elenor Lutz's](https://github.com/eleanorlutz) static Asteroid Atlas. 
+This is an [in development] interactive tool visualizing NASA JPL's small-body database building on the amazing work of [Elenor Lutz's](https://github.com/eleanorlutz).
 
 <a name="data"/>
 
