@@ -345,9 +345,13 @@ def main():
         print("No objects parsed. Exiting.")
         return
 
-    print("Parsing diameters table (heuristic) ...")
-    diams = parse_diameters_tab(DIAM_TAB)
-    print("Found {} diameter entries via heuristics.".format(len(diams)))
+        print("Parsing diameters table (heuristic) ...")
+    try:
+        diams = parse_diameters_tab(DIAM_TAB)
+        print("Found {} diameter entries via heuristics.".format(len(diams)))
+    except Exception as e:
+        print("Warning: diameter parsing failed with error:", e)
+        diams = {}
 
     colors = parse_cat_colors(PLOT_COLORS)
     print("Parsed {} colors.".format(len(colors)))
@@ -356,6 +360,26 @@ def main():
     print("Building unified time grid ...")
     times_grid = unify_time_grid(objects_data)
     print("Unified grid length:", len(times_grid))
+
+    # Prevent accidental extremely large time grids that kill memory / make huge JSON
+    MAX_TIME_POINTS = 10 #6000  # conservative default; adjust upward if you need higher resolution
+    if len(times_grid) > MAX_TIME_POINTS:
+        print(f"Unified time grid ({len(times_grid)}) exceeds {MAX_TIME_POINTS}. Downsampling uniformly to {MAX_TIME_POINTS} points.")
+        if np is not None:
+            indices = np.linspace(0, len(times_grid) - 1, MAX_TIME_POINTS).astype(int)
+            times_grid = [times_grid[i] for i in indices]
+        else:
+            # pure python linspace-style selection
+            step = (len(times_grid) - 1) / float(MAX_TIME_POINTS - 1)
+            new_times = []
+            for k in range(MAX_TIME_POINTS):
+                idx = int(round(k * step))
+                idx = max(0, min(idx, len(times_grid) - 1))
+                new_times.append(times_grid[idx])
+            # remove duplicates while preserving order
+            times_grid = sorted(set(new_times), key=new_times.index)
+        print("Downsampled time grid length:", len(times_grid))
+
 
     # build scene objects with interpolated positions
     scene_objects = []
