@@ -108,10 +108,61 @@ def discover_objects(data_dir):
                 objects.append({"class": sub, "path": path, "id": objid, "filename": entry})
     return objects
 
+# def parse_diameters_tab(tab_path):
+#     """
+#     Heuristic parser for tno_centaur_diam_alb_dens.tab
+#     Returns dict name_lower -> diameter_km (float) when successful.
+#     """
+#     diams = {}
+#     if not os.path.exists(tab_path):
+#         return diams
+#     with open(tab_path, 'r', encoding='utf-8', errors='ignore') as fh:
+#         for ln in fh:
+#             ln = ln.strip()
+#             if not ln:
+#                 continue
+#             # Some lines are comments; skip if starts with non-digit id
+#             if not re.match(r'^\d+', ln):
+#                 continue
+#             toks = ln.split()
+#             # first token numeric id; find a token that looks like a provisional designation like '1977'
+#             prov_idx = None
+#             for i, t in enumerate(toks):
+#                 if re.match(r'^\d{4}$', t):
+#                     prov_idx = i
+#                     break
+#             if prov_idx is None or prov_idx < 2:
+#                 # fallback: second token as name
+#                 name_tokens = [toks[1]]
+#             else:
+#                 name_tokens = toks[1:prov_idx]
+#             name = " ".join(name_tokens).strip()
+#             # After provisional and a handful of columns, search for a token that looks like diameter
+#             # heuristic: find numeric tokens between 0.1 and 50000 with a decimal point
+#             candidate = None
+#             for t in toks[prov_idx+1:]:
+#                 if re.match(r'^[+-]?\d+\.\d+(?:[Ee][+-]?\d+)?$', t):
+#                     try:
+#                         v = float(t)
+#                     except:
+#                         continue
+#                     if 0.05 <= v <= 50000:
+#                         candidate = v
+#                         break
+#             if candidate is not None:
+#                 diams[name.lower()] = candidate
+#     return diams
+
+
 def parse_diameters_tab(tab_path):
     """
     Heuristic parser for tno_centaur_diam_alb_dens.tab
     Returns dict name_lower -> diameter_km (float) when successful.
+
+    Robustness improvements:
+     - Handles cases where the provisional-designation (4-digit) token is missing.
+     - Uses a safe search_start index and guards against short token lists.
+     - Skips malformed lines without throwing.
     """
     diams = {}
     if not os.path.exists(tab_path):
@@ -125,33 +176,60 @@ def parse_diameters_tab(tab_path):
             if not re.match(r'^\d+', ln):
                 continue
             toks = ln.split()
+            if len(toks) < 2:
+                continue
             # first token numeric id; find a token that looks like a provisional designation like '1977'
             prov_idx = None
             for i, t in enumerate(toks):
                 if re.match(r'^\d{4}$', t):
                     prov_idx = i
                     break
+            # name tokens: prefer tokens between id (toks[0]) and prov_idx, else fallback to toks[1]
             if prov_idx is None or prov_idx < 2:
-                # fallback: second token as name
-                name_tokens = [toks[1]]
+                name_tokens = [toks[1]] if len(toks) > 1 else []
+                # choose a safe search start after the name and provisional guess
+                search_start = 2
             else:
                 name_tokens = toks[1:prov_idx]
+                search_start = prov_idx + 1
+
             name = " ".join(name_tokens).strip()
-            # After provisional and a handful of columns, search for a token that looks like diameter
-            # heuristic: find numeric tokens between 0.1 and 50000 with a decimal point
+            if not name:
+                # if we failed to extract a name, skip
+                continue
+
+            # After provisional (or fallback), search for a token that looks like diameter
             candidate = None
-            for t in toks[prov_idx+1:]:
+            # Guard: ensure search_start is within bounds
+            if search_start >= len(toks):
+                # nothing else on line
+                continue
+
+            for t in toks[search_start:]:
+                # look for explicit floats (with decimal or exponent)
                 if re.match(r'^[+-]?\d+\.\d+(?:[Ee][+-]?\d+)?$', t):
                     try:
                         v = float(t)
                     except:
                         continue
+                    # keep plausible diameter range in km
                     if 0.05 <= v <= 50000:
                         candidate = v
                         break
+                else:
+                    # sometimes integers exist for diameters (rare). try integer-like token
+                    if re.match(r'^[+-]?\d+$', t):
+                        try:
+                            v = float(t)
+                        except:
+                            continue
+                        if 0.05 <= v <= 50000:
+                            candidate = v
+                            break
             if candidate is not None:
                 diams[name.lower()] = candidate
     return diams
+
 
 
 def parse_cat_colors(csv_path):
