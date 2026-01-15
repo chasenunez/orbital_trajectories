@@ -125,8 +125,7 @@ def parse_diameters_tab(tab_path):
             if not re.match(r'^\d+', ln):
                 continue
             toks = ln.split()
-            # first token numeric id; find a token that looks like a provisional designation YYYY XX (e.g. 1977 UB)
-            # find where a token matches 4 digits
+            # first token numeric id; find a token that looks like a provisional designation like '1977'
             prov_idx = None
             for i, t in enumerate(toks):
                 if re.match(r'^\d{4}$', t):
@@ -148,13 +147,12 @@ def parse_diameters_tab(tab_path):
                     except:
                         continue
                     if 0.05 <= v <= 50000:
-                        # prefer values that are small (few km) rather than semimajor axis (AU); but semimajor axis often >1 and can be <50000,
-                        # so we pick a token around plausible diameter positions by picking the first candidate after prov_idx with value < 1e4
                         candidate = v
                         break
             if candidate is not None:
                 diams[name.lower()] = candidate
     return diams
+
 
 def parse_cat_colors(csv_path):
     cmap = {}
