@@ -2,6 +2,8 @@
 
 An [in-development] interactive viewer for NASA JPL's small-body database, building on the work of [Eleanor Lutz](https://github.com/eleanorlutz). The data-gathering notes below are largely hers, kept here because the cleaning steps still apply.
 
+ ![orbital_description](figures/overview.png)
+
 ## Table of Contents
 
 - [Gathering and processing data](#data)
