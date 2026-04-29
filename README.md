@@ -1,15 +1,13 @@
+# Orbital Trajectories
+
+An [in-development] interactive viewer for NASA JPL's small-body database, building on the work of [Eleanor Lutz](https://github.com/eleanorlutz). The data-gathering notes below are largely hers, kept here because the cleaning steps still apply.
+
 ## Table of Contents
 
-1. [Gathering and processing data](#data)
-2. [Map design in Python](#python)
-3. [Map design in Illustrator and Photoshop](#illustrator_photoshop)
-4. [References](#references)
-5. [License](#license)
-
-
-#### Orbital Trajectories Interface
-
-This is an [in development] interactive tool visualizing NASA JPL's small-body database building on the amazing work of [Elenor Lutz's](https://github.com/eleanorlutz).
+- [Gathering and processing data](#data)
+- [Mapping different types of orbital data](#python)
+- [References](#references)
+- [License](#license)
 
 <a name="data"/>
 
